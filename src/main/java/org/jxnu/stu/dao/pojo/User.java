@@ -1,5 +1,6 @@
 package org.jxnu.stu.dao.pojo;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class User {
@@ -19,6 +20,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "用户名不能为空")
     private String username;
 
     /**
@@ -28,6 +30,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "密码不能为空")
     private String password;
 
     /**
@@ -37,6 +40,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "邮箱地址不能为空")
     private String email;
 
     /**
@@ -46,6 +50,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "手机号不能为空")
     private String phone;
 
     /**
@@ -55,6 +60,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "密保问题不能为空")
     private String question;
 
     /**
@@ -64,6 +70,7 @@ public class User {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "密保答案不能为空")
     private String answer;
 
     /**

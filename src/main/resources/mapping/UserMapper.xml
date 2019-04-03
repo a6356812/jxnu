@@ -320,19 +320,19 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="email != null">
+      <if test="email != null and email != ''">
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null">
+      <if test="phone != null and phone != ''">
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="question != null">
+      <if test="question != null and question != ''">
         question = #{question,jdbcType=VARCHAR},
       </if>
-      <if test="answer != null">
+      <if test="answer != null and answer != '' ">
         answer = #{answer,jdbcType=VARCHAR},
       </if>
-      <if test="role != null">
+      <if test="role != null and role != ''">
         role = #{role,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
@@ -362,4 +362,53 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mmall_user
+    where username = #{username}
+  </select>
+  <select id="checkUserByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1)
+    from mmall_user
+    where email = #{email}
+  </select>
+  <select id="checkUserByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1)
+    from mmall_user
+    where username = #{username}
+  </select>
+  <select id="getQuestionByUsername" parameterType="java.lang.String" resultType="java.lang.String">
+    select question
+    from mmall_user
+    where username = #{username}
+  </select>
+  <select id="forgetCheckAnswer" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1)
+    from mmall_user
+    where username = #{username} and
+      question = #{question} and
+      answer = #{answer}
+  </select>
+  <update id="forgetResetPassword" parameterType="java.lang.String">
+    update
+    mmall_user
+    set
+    password = #{password},
+    update_time = now()
+  </update>
+  <update id="resetPassword" parameterType="java.lang.String">
+    update
+    mmall_user
+    set
+    password = #{password}
+    where username = #{username}
+  </update>
+  <select id="checkPasswordOld" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1)
+    from mmall_user
+    where username = #{username} and
+      password = #{password}
+  </select>
+
 </mapper>

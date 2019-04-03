@@ -1,18 +1,22 @@
 package org.jxnu.stu;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Hello world!
  *
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.jxnu.stu")
+@MapperScan(basePackages = "org.jxnu.stu.dao")
+@RestController
 public class App 
 {
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-        SpringApplication.run(App.class);
+        SpringApplication.run(App.class,args);
     }
 }
