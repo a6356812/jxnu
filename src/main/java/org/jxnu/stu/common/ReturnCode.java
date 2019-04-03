@@ -18,6 +18,11 @@ public enum ReturnCode implements CommonReturn{
     USER_RESET_PASSWORD_ERROR(20010,"用户重置密码失败"),
     USER_INFO_UPDATE_ERROR(20011,"用户信息更新失败"),
 
+    //start from 30000 to 40000 be used to description Category Error
+    CATEGORY_NOT_EXIST(30000,"该商品类别信息不存在"),
+    CATEGORY_ADD_ERROR(30001,"添加商品类别失败"),
+    CATEGORY_UPDATE_ERROR(30002,"更新商品类别信息失败"),
+
     //the encode string is null
 
     ;

@@ -11,4 +11,7 @@ public class Constant {
     public static final int USER_ADMIN = 0;
     public static final int USER_ORDINARY = 1;
 
+    public static final boolean CATEGORY_NORMAL = true;
+    public static final boolean CATEGORY_ABANDON = false;
+
 }

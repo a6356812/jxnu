@@ -93,4 +93,6 @@ public interface CategoryMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(Category record);
+
+    List<Category> findChildrenParallelCategory(Integer categoryId);
 }
