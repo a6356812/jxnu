@@ -170,14 +170,14 @@ public class UserController {
         return ServerResponse.createServerResponse(ReturnCode.ERROR.getCode(),"服务器异常");
     }
 
-    public UserVo coverUserVoFromUserBo(UserBo userBo){
+    public UserVo coverUserVoFromUserBo(UserBo userBo) throws BusinessException {
         if(userBo == null){
             return null;
         }
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(userBo,userVo);
-        userVo.setCreateTime(DateTimeHelper.transform(userBo.getCreateTime()));
-        userVo.setUpdateTime(DateTimeHelper.transform(userBo.getUpdateTime()));
+        userVo.setCreateTime(DateTimeHelper.dateToString(userBo.getCreateTime()));
+        userVo.setUpdateTime(DateTimeHelper.dateToString(userBo.getUpdateTime()));
         return userVo;
     }
 

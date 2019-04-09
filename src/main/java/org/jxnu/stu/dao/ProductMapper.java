@@ -93,4 +93,10 @@ public interface ProductMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(Product record);
+
+    List<Product> listProductByCategoryIdListOrProductName(@Param("productName") String productName,@Param("categoryIdList") List<Integer> categoryIdList);
+
+    List<Product> listAll();
+
+    List<Product> listProductByProductName(@Param("productName") String productName);
 }

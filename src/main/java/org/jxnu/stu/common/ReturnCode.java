@@ -5,6 +5,7 @@ public enum ReturnCode implements CommonReturn{
     ERROR(10000,"发生未知错误"),
     SUCCESS(10001,"成功！"),
     PARAMETER_VALUE_ERROR(10005,"参数异常"),
+    COVER_ERROR(10006,"类型转换错误"),
     //start from 20000 to 30000 be used to description User Error
     USER_NOT_EXIST(20001,"用户不存在"),
     USER_ALREADY_EXIST(20002,"用户已经存在"),
