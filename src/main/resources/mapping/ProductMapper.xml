@@ -426,4 +426,9 @@
       </if>
     </where>
   </select>
+  <update id="setSaleStatus">
+    update mmall_product
+    set status = #{status},update_time = now()
+    where id = #{productId}
+  </update>
 </mapper>

@@ -1,5 +1,7 @@
 package org.jxnu.stu.dao.pojo;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -20,6 +22,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotNull(message = "请填写商品分类信息")
     private Integer categoryId;
 
     /**
@@ -29,6 +32,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "请填写商品名称")
     private String name;
 
     /**
@@ -38,6 +42,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "请填写商品子标题")
     private String subtitle;
 
     /**
@@ -74,6 +79,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotNull(message = "请填写商品价格")
     private BigDecimal price;
 
     /**
@@ -83,6 +89,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotNull(message = "请填写商品库存")
     private Integer stock;
 
     /**
@@ -92,6 +99,7 @@ public class Product {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotNull(message = "请填写商品状态")
     private Integer status;
 
     /**

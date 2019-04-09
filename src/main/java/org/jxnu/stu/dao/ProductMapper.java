@@ -99,4 +99,7 @@ public interface ProductMapper {
     List<Product> listAll();
 
     List<Product> listProductByProductName(@Param("productName") String productName);
+
+    int setSaleStatus(@Param("productId") Integer productId,@Param("status") Integer status);
+
 }

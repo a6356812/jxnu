@@ -82,6 +82,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductVo detail(Integer productId) throws BusinessException {
         Product product = productMapper.selectByPrimaryKey(productId);
+        if(product == null){
+            throw new BusinessException(ReturnCode.PRODUCT_NOT_EXIST);
+        }
         ProductVo productVo = coverProductVoFromProductDoDetail(product);
         if(productVo == null){
             throw new BusinessException(ReturnCode.COVER_ERROR);
@@ -126,6 +129,27 @@ public class ProductServiceImpl implements ProductService {
         }
         PageInfo pageInfo = new PageInfo(productVoList);
         return pageInfo;
+    }
+
+    @Override
+    public void setSaleStatus(Integer productId, Integer status) throws BusinessException {
+        int i = productMapper.setSaleStatus(productId, status);
+        if(i < 1){
+            throw new BusinessException(ReturnCode.PRODUCT_UPDATE_ERROR);
+        }
+    }
+
+    @Override
+    public void save(Product product) throws BusinessException {
+        Integer result = null;
+        if(product.getId() == null){
+            result = productMapper.insertSelective(product);
+        }else{
+            result = productMapper.updateByPrimaryKeySelective(product);
+        }
+        if(result < 1){
+            throw new BusinessException(ReturnCode.PRODUCT_UPDATE_ERROR,"新增或更新产品信息失败");
+        }
     }
 
 

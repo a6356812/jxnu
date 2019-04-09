@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.Constant;
 import org.jxnu.stu.common.ReturnCode;
+import org.jxnu.stu.controller.vo.ProductVo;
 import org.jxnu.stu.controller.vo.UserVo;
 import org.jxnu.stu.service.FileService;
 import org.jxnu.stu.util.DateTimeHelper;
@@ -47,4 +48,5 @@ public class FileServiceImpl implements FileService {
         }
         return targetFile.getName();
     }
+
 }

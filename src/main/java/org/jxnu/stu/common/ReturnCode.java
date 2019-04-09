@@ -24,6 +24,14 @@ public enum ReturnCode implements CommonReturn{
     CATEGORY_ADD_ERROR(30001,"添加商品类别失败"),
     CATEGORY_UPDATE_ERROR(30002,"更新商品类别信息失败"),
 
+
+
+    //start from 40000 to 50000 be used to description product info
+    PRODUCT_NOT_EXIST(40000,"商品不存在"),
+    PRODUCT_UPDATE_ERROR(40001,"更新商品信息失败"),
+
+
+
     //the encode string is null
 
     ;

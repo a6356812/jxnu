@@ -1,15 +1,11 @@
 package org.jxnu.stu.controller.backend;
 
-import com.alibaba.druid.util.StringUtils;
 import com.github.pagehelper.PageInfo;
-import org.jxnu.stu.common.BusinessException;
-import org.jxnu.stu.common.Constant;
-import org.jxnu.stu.common.ReturnCode;
-import org.jxnu.stu.common.ServerResponse;
+import com.google.common.collect.Maps;
+import org.jxnu.stu.common.*;
 import org.jxnu.stu.controller.vo.ProductVo;
 import org.jxnu.stu.controller.vo.UserVo;
 import org.jxnu.stu.dao.pojo.Product;
-import org.jxnu.stu.dao.pojo.User;
 import org.jxnu.stu.service.FileService;
 import org.jxnu.stu.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +36,9 @@ public class ProductManageController {
 
     @Value("${ftp.server.http.prefix}")
     private String ftpServerHttpPrefix;
+
+    @Autowired
+    private ValidationImpl validation;
 
     /**
      * 列出所有商品
@@ -81,6 +82,13 @@ public class ProductManageController {
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),pageInfo);
     }
 
+    /**
+     * 上传图片接口
+     * @param file
+     * @param request
+     * @return
+     * @throws BusinessException
+     */
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<Map> upload(MultipartFile file, HttpServletRequest request) throws BusinessException {
@@ -95,6 +103,84 @@ public class ProductManageController {
         fileMap.put("uri",targetFileName);
         fileMap.put("url",url);
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),fileMap);
+    }
+
+    @RequestMapping(value = "/detail",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<ProductVo> detail(Integer productId,HttpServletRequest request) throws BusinessException {
+        UserVo user = (UserVo) request.getSession().getAttribute(Constant.CURRENT_USER);
+        if(user == null){
+            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
+        }
+        if(productId == null){
+            throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR,"请输入产品id");
+        }
+        ProductVo productVo = productService.detail(productId);
+        return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),productVo);
+    }
+
+    @RequestMapping(value = "/set_sale_status",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> setSaleStatus(Integer productId, Integer status,HttpServletRequest request) throws BusinessException {
+        UserVo user = (UserVo) request.getSession().getAttribute(Constant.CURRENT_USER);
+        if(user == null){
+            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
+        }
+        if(productId == null || status == null){
+            throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
+        }
+        productService.setSaleStatus(productId,status);
+        return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),null,"更新产品信息成功");
+    }
+
+
+    /**
+     * 新增或者更新产品信息，取决于是否传值了id
+     * @param product
+     * @return
+     */
+    @RequestMapping(value = "/save",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse save(@Valid Product product,HttpServletRequest request) throws BusinessException {
+        UserVo user = (UserVo) request.getSession().getAttribute(Constant.CURRENT_USER);
+        if(user == null){
+            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
+        }
+        ValidationResult validate = validation.validate(product);
+        if(validate.isHasError()){
+            throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR,validate.getErrMsg());
+        }
+        productService.save(product);
+        String msg = product.getId() == null ? "新增产品信息成功" : "更新产品信息成功";
+        return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),msg);
+    }
+
+
+    /**
+     * 基于富文本 simditor
+     * @param file
+     * @param request
+     * @return
+     * @throws BusinessException
+     */
+    @RequestMapping(value = "/richtext_img_upload",method = RequestMethod.POST)
+    @ResponseBody
+    public Map richtextImgUpload(MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws BusinessException {
+        Map<String,String> map = Maps.newHashMap();
+        UserVo user = (UserVo) request.getSession().getAttribute(Constant.CURRENT_USER);
+        if(user == null){
+            map.put("success","false");
+            map.put("msg","上传失败");
+            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
+        }
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String targetFileName = fileService.upload(file, path, request.getSession());
+        String url = ftpServerHttpPrefix + targetFileName;
+        map.put("success","true");
+        map.put("msg","上传成功");
+        map.put("file_path",url);
+        response.addHeader("Access-Control-Allow-Headers","X-File-Name");
+        return map;
     }
 
 
