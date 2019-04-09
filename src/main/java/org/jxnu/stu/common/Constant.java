@@ -17,6 +17,12 @@ public class Constant {
     public static final int USER_ADMIN = 0;
     public static final int USER_ORDINARY = 1;
 
+    public static final String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
+    public static final String LIMIT_NUM_FAIL = "LIMIT_NUM_FAIL";
+
+    public static final int CHECKED = 1;
+    public static final int UNCHECKED = 0;
+
     public interface ProductListOrderBy{
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_asc","price_desc");
     }

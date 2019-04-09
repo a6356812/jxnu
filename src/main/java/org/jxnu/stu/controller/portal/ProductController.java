@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.ReturnCode;
 import org.jxnu.stu.common.ServerResponse;
-import org.jxnu.stu.controller.vo.ProductListVo;
 import org.jxnu.stu.controller.vo.ProductVo;
 import org.jxnu.stu.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     *
+     * @param categoryId
+     * @param keyword 关键词
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy 例如 price_desc 属性加下划线
+     * @return
+     * @throws BusinessException
+     */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<PageInfo> list(Integer categoryId, String keyword,

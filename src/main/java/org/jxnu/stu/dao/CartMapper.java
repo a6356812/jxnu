@@ -2,6 +2,7 @@ package org.jxnu.stu.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.jxnu.stu.controller.vo.CartProductVoList;
 import org.jxnu.stu.dao.pojo.Cart;
 import org.jxnu.stu.dao.pojo.CartExample;
 
@@ -93,4 +94,34 @@ public interface CartMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(Cart record);
+
+    List<CartProductVoList> listByUserIdOrProductId(@Param("userId") Integer userId,@Param("productId") Integer productId);
+
+    int hasUnChecked(Integer userId);
+
+    /**
+     * 在原有的quantity上加上count
+     * @param userId
+     * @param productId
+     * @param count
+     * @return
+     */
+    int add(@Param("userId") Integer userId,@Param("productId") Integer productId,@Param("count") Integer count);
+
+    /**
+     * 直接update quantity变为count
+     * @param userId
+     * @param productId
+     * @param count
+     * @return
+     */
+    int update(@Param("userId") Integer userId,@Param("productId") Integer productId,@Param("count") Integer count);
+
+    int deleteProduct(@Param("userId") Integer userId,@Param("productIdList")List productIdList);
+
+    int selectOrUnSelect(@Param("userId")Integer userId,@Param("productId")Integer productId,@Param("checkStatus") Integer checkStatus);
+
+    int getCartProductCount(Integer userId);
+
+
 }

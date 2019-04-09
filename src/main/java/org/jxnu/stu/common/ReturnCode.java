@@ -31,6 +31,10 @@ public enum ReturnCode implements CommonReturn{
     PRODUCT_UPDATE_ERROR(40001,"更新商品信息失败"),
 
 
+    //start from 50000 to 60000 be used to description cart info
+    CART_ADD_ERROR(50001,"购物车添加商品失败"),
+    CART_UPDATE_ERRIR(50002,"更新购物车商品信息失败"),
+    CART_DELETE_ERROR(50003,"购物车删除商品失败"),
 
     //the encode string is null
 

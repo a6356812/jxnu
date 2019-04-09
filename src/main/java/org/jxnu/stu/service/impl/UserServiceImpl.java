@@ -26,12 +26,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBo login(String username, String password) throws Exception{
         User user = userMapper.selectByUsername(username);
-        if(user == null || user.getRole() == Constant.USER_ADMIN){
-            return null;
+        if(user == null ){
+            throw new BusinessException(ReturnCode.USER_NOT_EXIST);
         }
         String loginCrypyPassword = Md5Helper.encode(password);
         if(!StringUtils.equals(loginCrypyPassword,user.getPassword())){
-            return null;
+            throw new BusinessException(ReturnCode.USER_LOGIN_FAILED);
         }
         return coverUserBoFromUserDo(user);
     }

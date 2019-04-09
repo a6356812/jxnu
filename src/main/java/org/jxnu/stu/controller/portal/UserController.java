@@ -43,9 +43,6 @@ public class UserController {
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR,"密码不能为空");
         }
         UserBo userBo = userService.login(username, password);
-        if (userBo == null) {
-            throw new BusinessException(ReturnCode.USER_LOGIN_FAILED);
-        }
         UserVo userVo = coverUserVoFromUserBo(userBo);
         session.setAttribute(Constant.CURRENT_USER,userVo);
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),ReturnCode.USER_LOGIN_SUCCESS.getMsg(),userVo);
