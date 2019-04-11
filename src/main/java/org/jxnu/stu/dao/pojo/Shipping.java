@@ -1,5 +1,6 @@
 package org.jxnu.stu.dao.pojo;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class Shipping {
@@ -28,6 +29,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人姓名不能为空")
     private String receiverName;
 
     /**
@@ -37,6 +39,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人固定电话不能为空")
     private String receiverPhone;
 
     /**
@@ -46,6 +49,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人电话不能为空")
     private String receiverMobile;
 
     /**
@@ -55,6 +59,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人省份不能为空")
     private String receiverProvince;
 
     /**
@@ -64,6 +69,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人城市不能为空")
     private String receiverCity;
 
     /**
@@ -82,6 +88,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人地址不能为空")
     private String receiverAddress;
 
     /**
@@ -91,6 +98,7 @@ public class Shipping {
      *
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
+    @NotEmpty(message = "收货人地区邮编不能为空")
     private String receiverZip;
 
     /**

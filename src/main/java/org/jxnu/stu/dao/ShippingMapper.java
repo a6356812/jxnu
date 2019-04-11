@@ -93,4 +93,12 @@ public interface ShippingMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(Shipping record);
+
+    int delByUserIdShippingId(@Param("shippingId") Integer shippingId,@Param("userId") Integer userId);
+
+    int updateByUserIdShippingIdSelective(Shipping shipping);
+
+    Shipping selectByUserIdShippingId(@Param("shippingId") Integer shippingId,@Param("userId") Integer userId);
+
+    List<Shipping> listAllByUserId(Integer userId);
 }
