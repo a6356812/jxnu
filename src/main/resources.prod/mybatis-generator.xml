@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+  <!-- 配置连接数据库的参数 -->
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://localhost:3306/mmall_learning?serverTimezone=GMT&amp;useSSL=false"
+        userId="root"
+        password="123456">
+    </jdbcConnection>
+	
+	<!-- 生成PO的位置 -->
+    <javaModelGenerator targetPackage="org.jxnu.stu.dao.pojo" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+	<!-- 生成mapper.xml的位置 -->
+    <sqlMapGenerator targetPackage="mapping"  targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+	<!-- 生成mapper.java的位置 -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="org.jxnu.stu.dao"  targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+	<!-- 指定数据库表 -->
+	<table tableName="mmall_cart" domainObjectName="Cart"/>
+	<table tableName="mmall_category" domainObjectName="Category"/>
+	<table tableName="mmall_order" domainObjectName="Order"/>
+	<table tableName="mmall_order_item" domainObjectName="OrderItem"/>
+	<table tableName="mmall_pay_info" domainObjectName="PayInfo"/>
+	<table tableName="mmall_product" domainObjectName="Product">
+            <columnOverride column="detail" jdbcType="VARCHAR"/>
+            <columnOverride column="sub_images" jdbcType="VARCHAR"/>
+    </table>
+	<table tableName="mmall_shipping" domainObjectName="Shipping"/>
+	<table tableName="mmall_user" domainObjectName="User"/>
+
+    <!-- <table schema="DB2ADMIN" tableName="ALLTYPES" domainObjectName="Customer" >
+      <property name="useActualColumnNames" value="true"/>
+      <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+      <columnOverride column="DATE_FIELD" property="startDate" />
+      <ignoreColumn column="FRED" />
+      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+    </table> -->
+
+  </context>
+</generatorConfiguration>

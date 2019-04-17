@@ -93,4 +93,6 @@ public interface OrderItemMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(OrderItem record);
+
+    List<OrderItem> selectByOrderNoAndUserId(@Param("orderNo")String orderNo,@Param("userId")Integer userId);
 }

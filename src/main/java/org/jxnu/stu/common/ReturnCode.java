@@ -43,6 +43,16 @@ public enum ReturnCode implements CommonReturn{
     SHIPPING_NOT_EXIST(60003,"收货地址信息不存在"),
 
 
+    //start from 70000 to 80000 be used to description order info
+    ORDER_NOT_EXIST(70000,"订单信息不存在"),
+    ORDER_STATUS_NOT_EXIST(70001,"该订单状态未被定义"),
+
+
+    //start from 80000 to 90000 be used to description alipay error info
+    ALIPAY_CALLBACK_REPETOR(80000,"阿里回调重复"),
+    ALIPAY_CALLBACK_ORDER_NOT_EXIST(80001,"阿里回调订单不存在"),
+    ALIPAY_CALLBACK_AMOUNT_NOT_EQUAL(80002,"阿里回调金额与订单金额不匹配"),
+
 
     //the encode string is null
 

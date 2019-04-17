@@ -2,6 +2,7 @@ package org.jxnu.stu.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.aspectj.weaver.ast.Or;
 import org.jxnu.stu.dao.pojo.Order;
 import org.jxnu.stu.dao.pojo.OrderExample;
 
@@ -93,4 +94,8 @@ public interface OrderMapper {
      * @mbg.generated Sat Mar 30 17:46:04 CST 2019
      */
     int updateByPrimaryKey(Order record);
+
+    Order selectByOrderNoAndUserId(@Param("orderNo")String orderNo,@Param("userId")Integer userId);
+
+    Order selectByOrderNo(String orderNo);
 }

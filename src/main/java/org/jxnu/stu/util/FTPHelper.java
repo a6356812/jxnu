@@ -2,6 +2,8 @@ package org.jxnu.stu.util;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.jxnu.stu.common.BusinessException;
+import org.jxnu.stu.common.ReturnCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,13 +39,13 @@ public class FTPHelper {
         this.pwd = pwd;
     }
 
-    public static boolean uploadFile(List<File> fileList) throws IOException {
+    public static boolean uploadFile(List<File> fileList) throws IOException, BusinessException {
         FTPHelper ftpHelper = new FTPHelper(ftpIp,ftpPort,ftpUser,ftpPassword);
         boolean result = ftpHelper.uploadFile("img", fileList);
         return result;
     }
 
-    private boolean uploadFile(String remotePath,List<File> fileList) throws IOException {
+    private boolean uploadFile(String remotePath,List<File> fileList) throws IOException, BusinessException {
         boolean uploaded = false;
         FileInputStream fileInputStream = null;
         //连接ftp服务器
@@ -70,7 +72,7 @@ public class FTPHelper {
         return uploaded;
     }
 
-    private boolean connectServer(String ip,int port,String user,String password){
+    private boolean connectServer(String ip,int port,String user,String password) throws BusinessException {
         ftpClient = new FTPClient();
         boolean connectSuccess = false;
         try {
@@ -79,6 +81,7 @@ public class FTPHelper {
         } catch (IOException e) {
             System.out.println("连接服务器失败");
             e.printStackTrace();
+            throw new BusinessException(ReturnCode.ERROR,"连接服务器失败");
         }
         return connectSuccess;
     }

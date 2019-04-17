@@ -5,9 +5,9 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>mmall</display-name>
 	
-	<!--<welcome-file-list>
+	<welcome-file-list>
 		<welcome-file>welcome.html</welcome-file>
-	</welcome-file-list>-->
+	</welcome-file-list>
 
 	<!-- 解决post乱码问题 -->
 	<!--<filter>

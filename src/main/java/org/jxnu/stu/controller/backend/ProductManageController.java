@@ -91,7 +91,7 @@ public class ProductManageController {
      */
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<Map> upload(MultipartFile file, HttpServletRequest request) throws BusinessException {
+    public ServerResponse<Map<String,String>> upload(MultipartFile file, HttpServletRequest request) throws BusinessException {
         UserVo user = (UserVo) request.getSession().getAttribute(Constant.CURRENT_USER);
         if(user == null){
             throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
