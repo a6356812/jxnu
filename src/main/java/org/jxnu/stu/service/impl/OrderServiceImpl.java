@@ -18,11 +18,18 @@ import org.apache.commons.lang.StringUtils;
 import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.Constant;
 import org.jxnu.stu.common.ReturnCode;
+import org.jxnu.stu.common.ServerResponse;
+import org.jxnu.stu.controller.vo.ShippingVo;
+import org.jxnu.stu.dao.CartMapper;
 import org.jxnu.stu.dao.OrderItemMapper;
 import org.jxnu.stu.dao.OrderMapper;
+import org.jxnu.stu.dao.ProductMapper;
+import org.jxnu.stu.dao.pojo.Cart;
 import org.jxnu.stu.dao.pojo.Order;
 import org.jxnu.stu.dao.pojo.OrderItem;
+import org.jxnu.stu.dao.pojo.Product;
 import org.jxnu.stu.service.OrderService;
+import org.jxnu.stu.service.ShippingService;
 import org.jxnu.stu.util.BigDecimalHelper;
 import org.jxnu.stu.util.FTPHelper;
 import org.jxnu.stu.util.PropertiesHelper;
@@ -44,9 +51,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderItemMapper orderItemMapper;
-
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private ShippingService shippingService;
+    @Autowired
+    private CartMapper cartMapper;
+    @Autowired
+    private ProductMapper productMapper;
 
     private static AlipayTradeService tradeService;
 
@@ -221,7 +233,63 @@ public class OrderServiceImpl implements OrderService {
         return "success";
     }
 
-    // 简单打印应答
+    /**
+     * 创建订单
+     * @param shippingId
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    @Override
+    public ServerResponse create(Integer shippingId, Integer userId) throws BusinessException {
+        ShippingVo shippingVo = shippingService.select(shippingId, userId);
+        List<Cart> cartList = cartMapper.selectCheckedByUserId(userId);
+        List<OrderItem> orderItemList = this.productOrderItem(userId, cartList);
+        //封装Order
+        Order order = new Order();
+        order.setOrderNo(productOrderNo());
+        order.setUserId(userId);
+        order.setShippingId(shippingId);
+        order.setPayment(this.getPayment(orderItemList));
+
+        order.setPostage(0);
+
+        return null;
+    }
+
+    private BigDecimal getPayment(List<OrderItem> orderItemList){
+        BigDecimal payment = new BigDecimal("0");
+        for(OrderItem orderItem:orderItemList){
+            payment = BigDecimalHelper.add(payment, orderItem.getTotalPrice());
+        }
+        return payment;
+    }
+
+    private long productOrderNo(){
+        return System.currentTimeMillis()+System.currentTimeMillis()%9;
+    }
+
+    private List<OrderItem> productOrderItem(Integer userId,List<Cart> cartList){
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for(Cart cartItem : cartList){
+            OrderItem orderItem = new OrderItem();
+            Product product = productMapper.selectByPrimaryKey(orderItem.getProductId());
+            orderItem.setUserId(userId);
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
+            orderItem.setProductImage(product.getMainImage());
+            orderItem.setCurrentUnitPrice(product.getPrice());
+            orderItem.setTotalPrice(BigDecimalHelper.mul(product.getPrice(),new BigDecimal(cartItem.getQuantity())));
+            orderItemList.add(orderItem);
+        }
+        return orderItemList;
+    }
+
+    /**
+     * 阿里支付简单打印应答
+     * @param response
+     */
     private void dumpResponse(AlipayResponse response) {
         if (response != null) {
             logger.info(String.format("code:%s, msg:%s", response.getCode(), response.getMsg()));

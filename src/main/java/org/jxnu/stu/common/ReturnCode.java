@@ -6,6 +6,7 @@ public enum ReturnCode implements CommonReturn{
     SUCCESS(10001,"成功！"),
     PARAMETER_VALUE_ERROR(10005,"参数异常"),
     COVER_ERROR(10006,"类型转换错误"),
+
     //start from 20000 to 30000 be used to description User Error
     USER_NOT_EXIST(20001,"用户不存在"),
     USER_ALREADY_EXIST(20002,"用户已经存在"),
@@ -18,6 +19,7 @@ public enum ReturnCode implements CommonReturn{
     USER_FORGETTOKEN_ERROR(20009,"重置密码forgetToken不一致"),
     USER_RESET_PASSWORD_ERROR(20010,"用户重置密码失败"),
     USER_INFO_UPDATE_ERROR(20011,"用户信息更新失败"),
+    USER_HAS_NO_PERMISSION(20012,"用户无权限"),
 
     //start from 30000 to 40000 be used to description Category Error
     CATEGORY_NOT_EXIST(30000,"该商品类别信息不存在"),

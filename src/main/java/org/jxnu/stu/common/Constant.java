@@ -25,6 +25,10 @@ public class Constant {
     public static final int CHECKED = 1;
     public static final int UNCHECKED = 0;
 
+    public interface Time{
+        public int SESSION_TIME_OUT = 60 * 30;
+    }
+
     public interface ProductListOrderBy{
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_asc","price_desc");
     }

@@ -97,7 +97,7 @@ public class ProductManageController {
             throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
         }
         String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(file, path, request.getSession());
+        String targetFileName = fileService.upload(file, path, request);
         String url = ftpServerHttpPrefix + targetFileName;
         Map<String,String> fileMap = new HashMap<>();
         fileMap.put("uri",targetFileName);
@@ -174,7 +174,7 @@ public class ProductManageController {
             throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
         }
         String path = request.getSession().getServletContext().getRealPath("upload");
-        String targetFileName = fileService.upload(file, path, request.getSession());
+        String targetFileName = fileService.upload(file, path, request);
         String url = ftpServerHttpPrefix + targetFileName;
         map.put("success","true");
         map.put("msg","上传成功");
