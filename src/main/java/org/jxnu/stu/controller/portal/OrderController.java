@@ -2,6 +2,7 @@ package org.jxnu.stu.controller.portal;
 
 import com.alibaba.druid.util.StringUtils;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.Constant;
 import org.jxnu.stu.common.ReturnCode;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -80,9 +82,10 @@ public class OrderController {
      * @return
      * @throws BusinessException
      */
-    @RequestMapping(value = "/alipay_callback",method = RequestMethod.POST)
+    @RequestMapping(value = "/alipay_callback")
     @ResponseBody
     public String alipayCallback(HttpServletRequest request) throws BusinessException {
+        log.info("支付宝回调开始");
         String callback = orderService.alipayCallback(request);
         return callback;
     }

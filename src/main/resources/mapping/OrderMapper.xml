@@ -434,7 +434,7 @@
     and order_no = #{orderNo}
   </select>
 
-  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.Long">
     select
     <include refid="Base_Column_List"/>
     from mmall_order

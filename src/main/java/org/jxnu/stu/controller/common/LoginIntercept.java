@@ -69,8 +69,10 @@ public class LoginIntercept implements HandlerInterceptor {
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             if(userVo == null){
+                log.info("用户未登录！");
                 writer.print(JsonHelper.obj2string(ServerResponse.createServerResponse(ReturnCode.USER_NOT_LOGIN.getCode(),ReturnCode.USER_NOT_LOGIN.getMsg())));
             }else if(requestURL.matches("/manage") && userVo.getRole() != Constant.USER_ADMIN){
+                log.info("用户ID:{},无权限访问",userVo.getId());
                 writer.print(JsonHelper.obj2string(ServerResponse.createServerResponse(ReturnCode.USER_HAS_NO_PERMISSION.getCode(),ReturnCode.USER_HAS_NO_PERMISSION.getMsg())));
             }
             writer.flush();

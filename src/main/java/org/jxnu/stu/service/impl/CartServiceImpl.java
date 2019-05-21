@@ -1,6 +1,7 @@
 package org.jxnu.stu.service.impl;
 
 import com.google.common.base.Splitter;
+import lombok.extern.slf4j.Slf4j;
 import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.Constant;
 import org.jxnu.stu.common.ReturnCode;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -110,6 +112,17 @@ public class CartServiceImpl implements CartService {
         }
         CartVo cartVo = list(userId);
         return cartVo;
+    }
+
+    @Override
+    public Boolean clearCart(Integer userId){
+        try {
+            cartMapper.deleteAllCart(userId);
+            return true;
+        }catch (Exception e){
+            log.error("清空购物车失败！",e);
+            return false;
+        }
     }
 
     @Override

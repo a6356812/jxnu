@@ -63,6 +63,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductMapper productMapper;
     @Autowired
     private ShippingMapper shippingMapper;
+    @Autowired
+    private PayInfoMapper payInfoMapper;
 
     private static AlipayTradeService tradeService;
 
@@ -158,6 +160,8 @@ public class OrderServiceImpl implements OrderService {
                     logger.error("上传二维码失败",e);
                     throw new Exception(e);
                 }
+                //上传完成后删除图片
+                targetFile.delete();
                 Map<String,String> map = new HashMap<>();
                 map.put("orderNo",outTradeNo);
                 map.put("qrPath",PropertiesHelper.getProperties("ftp.server.http.prefix")+targetFile.getName());
@@ -197,21 +201,19 @@ public class OrderServiceImpl implements OrderService {
         while (iterator.hasNext()){
             String key = iterator.next();
             String[] values = parameterMap.get(key);
-            StringBuffer stringBuffer = new StringBuffer();
+            String valueStr = new String();
             for(int i=0;i<values.length;i++){
-                if(i==0){
-                    stringBuffer.append(values[i]);
-                }else {
-                    stringBuffer.append(","+values[i]);
-                }
+                valueStr = i == values.length-1 ? valueStr + values[i] : valueStr + values[i] + ",";
             }
-            map.put(key,new String(stringBuffer));
+            map.put(key,valueStr);
         }
+        map.remove("sign_type");
         //开始验签
         try {
-            boolean rsaCheckV2 = AlipaySignature.rsaCheckV2(map, Configs.getPublicKey(), "UTF-8", Configs.getSignType());
+            boolean rsaCheckV2 = AlipaySignature.rsaCheckV2(map, Configs.getAlipayPublicKey(), "UTF-8", Configs.getSignType());
             if(!rsaCheckV2){
-                throw new BusinessException(ReturnCode.ERROR,"恶意请求将提交网警处理！");
+                log.warn("遭到恶意请求!");
+                return "恶意请求将提交网警处理!";
             }
         } catch (AlipayApiException e) {
             logger.error("支付宝验签失败",e);
@@ -233,8 +235,28 @@ public class OrderServiceImpl implements OrderService {
             logger.info(ReturnCode.ALIPAY_CALLBACK_AMOUNT_NOT_EQUAL.getMsg());
             return "false";
         }
+        String tradeStatus = map.get("trade_status");
+        String tradeNo = map.get("trade_no");
+        if(StringUtils.equals(Constant.AlipayCallback.TRADE_STATUS_TRADE_SUCCESS,tradeStatus)){
+            //更新Order表
+            Order order = new Order();
+            order.setId(callBackOrder.getId());
+            order.setPaymentTime(new Date());
+            order.setStatus(Constant.OrderStatus.ORDER_PAYED.getStatusCode());
+            orderMapper.updateByPrimaryKeySelective(order);
+            //更新pay_info表
+            PayInfo payInfo = new PayInfo();
+            payInfo.setUserId(callBackOrder.getUserId());
+            payInfo.setOrderNo(callBackOrder.getOrderNo());
+            payInfo.setPayPlatform(Constant.PayPlatform.ALI_ZFB.getPlatformCode());
+            payInfo.setPlatformNumber(tradeNo);
+            payInfo.setPlatformStatus(tradeStatus);
+            payInfoMapper.insert(payInfo);
+            log.info("AlipayCallback回调成功！");
+            return Constant.AlipayCallback.RESPONSE_SUCCESS;
+        }
         //这里我们就不判断seller_id了，因为没有签约
-        return "success";
+       return Constant.AlipayCallback.RESPONSE_FAILED;
     }
 
     /**
@@ -572,8 +594,8 @@ public class OrderServiceImpl implements OrderService {
     private List<OrderItem> assembleOrderItem(Integer userId,List<Cart> cartList){
         List<OrderItem> orderItemList = new ArrayList<>();
         for(Cart cartItem : cartList){
+            Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
             OrderItem orderItem = new OrderItem();
-            Product product = productMapper.selectByPrimaryKey(orderItem.getProductId());
             orderItem.setUserId(userId);
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setProductId(product.getId());

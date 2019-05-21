@@ -70,6 +70,15 @@ public class CartController {
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),cartVo);
     }
 
+    @RequestMapping(value = "/clear_cart",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> clearCart(HttpServletRequest request){
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
+        Boolean res = cartService.clearCart(userVo.getId());
+        return res ? ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),null,"清空购物车成功！")
+                : ServerResponse.createServerResponse(ReturnCode.CART_CLEAR_FAILD.getCode(),"清空购物车失败");
+    }
+
     @RequestMapping(value = "/select",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> select(Integer productId,HttpServletRequest request) throws BusinessException {

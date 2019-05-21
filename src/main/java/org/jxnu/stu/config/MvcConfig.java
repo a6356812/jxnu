@@ -27,7 +27,9 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         patterns.add("/user/get_information");
         patterns.add("/user/logout");
         patterns.add("/manage/**");
-        registry.addInterceptor(loginIntercept).addPathPatterns(patterns);
+        List<String> excludePatterns = new ArrayList<>();
+        excludePatterns.add("/order/alipay_callback");
+        registry.addInterceptor(loginIntercept).addPathPatterns(patterns).excludePathPatterns(excludePatterns);
         super.addInterceptors(registry);
     }
 }

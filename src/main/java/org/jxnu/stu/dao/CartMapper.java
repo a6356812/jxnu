@@ -125,5 +125,7 @@ public interface CartMapper {
 
     List<Cart> selectCheckedByUserId(Integer userId);
 
+    int deleteAllCart(Integer userId);
+
 
 }

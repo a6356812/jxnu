@@ -389,6 +389,12 @@
         and checked = 1
     </select>
 
+    <delete id="deleteAllCart" parameterType="java.lang.Integer">
+        delete
+        from mmall_cart
+        where user_id = #{userId}
+    </delete>
+
 
 
 </mapper>
