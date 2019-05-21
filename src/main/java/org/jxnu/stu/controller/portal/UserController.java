@@ -85,14 +85,7 @@ public class UserController {
     @RequestMapping(value = "/get_user_info",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<UserVo> getUserInfo(HttpServletRequest request) throws Exception {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),userVo);
     }
 
@@ -161,25 +154,16 @@ public class UserController {
     @RequestMapping(value = "/getInformation",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<UserVo> getInformation(HttpServletRequest request) throws Exception{
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),userVo);
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpServletRequest request) throws BusinessException {
+    public ServerResponse<String> logout(HttpServletRequest request,HttpServletResponse response) throws BusinessException {
         String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
         if(redisTemplate.delete(loggingToken)){
+            CookieHelper.delLoggingToken(request,response);
             return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),"退出成功");
         }
         return ServerResponse.createServerResponse(ReturnCode.ERROR.getCode(),"服务器异常");

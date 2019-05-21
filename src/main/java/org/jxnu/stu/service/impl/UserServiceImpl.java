@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         if(!com.alibaba.druid.util.StringUtils.equals(cacheForgetToken,forgetToken)){
             throw new BusinessException(ReturnCode.USER_FORGETTOKEN_ERROR,"请重新回答密保问题");
         }
-        int i = userMapper.forgetResetPassword(username, Md5Helper.encode(newPassword));
+        int i = userMapper.resetPassword(username, Md5Helper.encode(newPassword));
         if(i <= 0){
             throw new BusinessException(ReturnCode.USER_RESET_PASSWORD_ERROR);
         }
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public UserBo coverUserBoFromUserDo(User user){
+    private UserBo coverUserBoFromUserDo(User user){
         if(user == null){
             return null;
         }

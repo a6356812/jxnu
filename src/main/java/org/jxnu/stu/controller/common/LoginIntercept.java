@@ -2,6 +2,7 @@ package org.jxnu.stu.controller.common;
 
 import com.alibaba.druid.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jxnu.stu.common.BusinessException;
 import org.jxnu.stu.common.Constant;
 import org.jxnu.stu.common.ReturnCode;
 import org.jxnu.stu.common.ServerResponse;
@@ -29,9 +30,18 @@ public class LoginIntercept implements HandlerInterceptor {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 全局拦截器，登录及权限校验，以及请求参数展示
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("请求的url为:{}",request.getRequestURL());
+        String requestURL = request.getRequestURL().toString();
+        //封装请求方法名和请求参数
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         String methodName = handlerMethod.getMethod().getName();
         String className = handlerMethod.getBean().getClass().getSimpleName();
@@ -44,34 +54,29 @@ public class LoginIntercept implements HandlerInterceptor {
             String value = Arrays.toString(values);
             parameters.append(key+"="+value+";");
         }
-        if(StringUtils.equals("UserController",className) && StringUtils.equals("login",methodName)){
-            log.info("权限拦截器拦截到请求，ClassName:{}，MethodName:{}",className,methodName);
-            return true;
-        }
-        UserVo userVo = null;
+        log.info("请求的URL为{},请求的类名为{},请求的方法名为{},请求的参数为{}",requestURL,className,methodName,parameters.toString());
+        //获取当前用户信息
         String loggingToken = CookieHelper.readLoggingToken(request);
+        UserVo userVo = null;
         if(!StringUtils.isEmpty(loggingToken)){
             userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
         }
-        if(userVo == null || userVo.getRole().intValue() != Constant.USER_ORDINARY){
-            //即不调用controller的方法，直接返回response给用户
+        //用户未登录，或者为后台请求，则必须为管理员身份
+        if(userVo == null || (requestURL.matches("/manage") && userVo.getRole() != Constant.USER_ADMIN)){
+            //设置PrintWriter
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             if(userVo == null){
                 writer.print(JsonHelper.obj2string(ServerResponse.createServerResponse(ReturnCode.USER_NOT_LOGIN.getCode(),ReturnCode.USER_NOT_LOGIN.getMsg())));
-                //throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-            }else if(userVo.getRole().intValue() != Constant.USER_ORDINARY){
+            }else if(requestURL.matches("/manage") && userVo.getRole() != Constant.USER_ADMIN){
                 writer.print(JsonHelper.obj2string(ServerResponse.createServerResponse(ReturnCode.USER_HAS_NO_PERMISSION.getCode(),ReturnCode.USER_HAS_NO_PERMISSION.getMsg())));
-                //throw new BusinessException(ReturnCode.ERROR,"用户无权限");
             }
             writer.flush();
             writer.close();
             return false;
         }
-
-        log.info("request parameters is:{}",parameters.toString());
         return true;
     }
 

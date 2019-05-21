@@ -32,14 +32,7 @@ public class CartController {
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> list(HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         CartVo cartVo = cartService.list(userVo.getId());
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),cartVo);
     }
@@ -47,14 +40,7 @@ public class CartController {
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> add(Integer productId,Integer count,HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         if(productId == null || count == null){
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
         }
@@ -65,14 +51,7 @@ public class CartController {
     @RequestMapping(value = "/update",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> update(Integer productId,Integer count,HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         if(productId == null || count == null){
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
         }
@@ -83,14 +62,7 @@ public class CartController {
     @RequestMapping(value = "/delete_product",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> deleteProduct(String productIds,HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         if(StringUtils.isEmpty(productIds)){
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
         }
@@ -101,14 +73,7 @@ public class CartController {
     @RequestMapping(value = "/select",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> select(Integer productId,HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         if(productId == null){
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
         }
@@ -119,14 +84,7 @@ public class CartController {
     @RequestMapping(value = "/un_select",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> unSelect(Integer productId,HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         if(productId == null){
             throw new BusinessException(ReturnCode.PARAMETER_VALUE_ERROR);
         }
@@ -137,14 +95,7 @@ public class CartController {
     @RequestMapping(value = "/get_cart_product_count",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<Integer> getCartProductCount(HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         Integer cartProductCount = cartService.getCartProductCount(userVo.getId());
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),cartProductCount);
     }
@@ -152,14 +103,7 @@ public class CartController {
     @RequestMapping(value = "/select_all",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> selectAll(HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         CartVo cartVo = cartService.selectOrUnSelect(userVo.getId(), null, Constant.CHECKED);
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),cartVo);
     }
@@ -167,21 +111,10 @@ public class CartController {
     @RequestMapping(value = "/un_select_all",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> unSelectAll(HttpServletRequest request) throws BusinessException {
-        String loggingToken = CookieHelper.readLoggingToken(request);
-        if(loggingToken == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
-        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(loggingToken);
-        if(userVo == null){
-            throw new BusinessException(ReturnCode.USER_NOT_LOGIN);
-        }
+        UserVo userVo = (UserVo) redisTemplate.opsForValue().get(CookieHelper.readLoggingToken(request));
         CartVo cartVo = cartService.selectOrUnSelect(userVo.getId(), null, Constant.UNCHECKED);
         return ServerResponse.createServerResponse(ReturnCode.SUCCESS.getCode(),cartVo);
     }
-
-
-
-
 
 
 }

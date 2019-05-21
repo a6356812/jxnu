@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class MvcConfig extends WebMvcConfigurationSupport {
 
@@ -14,7 +17,17 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginIntercept).addPathPatterns("/**");
+        List<String> patterns = new ArrayList<>();
+        patterns.add("/shipping/**");
+        patterns.add("/order/**");
+        patterns.add("/cart/**");
+        patterns.add("/user/get_user_info");
+        patterns.add("/user/reset_password");
+        patterns.add("/user/update_information");
+        patterns.add("/user/get_information");
+        patterns.add("/user/logout");
+        patterns.add("/manage/**");
+        registry.addInterceptor(loginIntercept).addPathPatterns(patterns);
         super.addInterceptors(registry);
     }
 }

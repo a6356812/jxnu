@@ -71,6 +71,26 @@ public class Constant {
         }
     }
 
+    public enum  PaymentType{
+        OLINE_PAY(1,"网上支付"),
+        ;
+
+        private Integer statusCode;
+        private String statusMsg;
+        PaymentType(Integer statusCode,String statusMsg){
+            this.statusCode = statusCode;
+            this.statusMsg = statusMsg;
+        }
+
+        public Integer getStatusCode() {
+            return statusCode;
+        }
+
+        public String getStatusMsg() {
+            return statusMsg;
+        }
+    }
+
     public static final boolean CATEGORY_NORMAL = true;
     public static final boolean CATEGORY_ABANDON = false;
 

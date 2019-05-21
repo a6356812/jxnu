@@ -45,7 +45,7 @@ public class CookieHelper {
                 cookie.setPath("/");
                 cookie.setDomain(COOKIE_DOMAIN);
                 cookie.setMaxAge(0);
-                log.info("del cookieName:{},cookieValue:{}",cookie.getName(),cookie.getValue());
+                log.info("delete Cookie! cookieName:{},cookieValue:{}",cookie.getName(),cookie.getValue());
                 response.addCookie(cookie);
                 return;
             }

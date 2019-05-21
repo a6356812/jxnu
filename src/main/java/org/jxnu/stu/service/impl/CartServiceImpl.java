@@ -10,6 +10,7 @@ import org.jxnu.stu.dao.CartMapper;
 import org.jxnu.stu.dao.pojo.Cart;
 import org.jxnu.stu.service.CartService;
 import org.jxnu.stu.util.BigDecimalHelper;
+import org.jxnu.stu.util.PropertiesHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class CartServiceImpl implements CartService {
         List<CartProductVoList> cartProductVoLists = cartMapper.listByUserIdOrProductId(userId,null);
         BigDecimal totalPrice = new BigDecimal("0");
         for(CartProductVoList cartProductVoList:cartProductVoLists){
+            cartProductVoList.setProductMainImage(PropertiesHelper.getProperties("ftp.server.http.prefix")+cartProductVoList.getProductMainImage());
             cartProductVoList.setProductTotalPrice(BigDecimalHelper.mul(new BigDecimal(cartProductVoList.getQuantity()),cartProductVoList.getProductPrice()));
             if(cartProductVoList.getQuantity() > cartProductVoList.getProductStock()){
                 //首先去更新数据库数据让其购买数量等于库存数

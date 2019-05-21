@@ -435,4 +435,10 @@
     where id = #{productId}
   </update>
 
+  <update id="updateStockById" parameterType="java.lang.Integer">
+    update mmall_product
+    set stock = stock + #{number}
+    where id = #{productId}
+  </update>
+
 </mapper>
