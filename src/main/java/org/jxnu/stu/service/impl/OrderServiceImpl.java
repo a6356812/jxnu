@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -265,6 +266,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      * @throws BusinessException
      */
+    @Transactional
     @Override
     public OrderVo create(Integer shippingId, Integer userId) throws BusinessException {
         //订单入库---由cart表得到对应商品，添加至order和orderItem表中，同时清空购物车和和product减库存
